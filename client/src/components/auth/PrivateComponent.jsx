@@ -1,9 +1,10 @@
+import { useSelector } from "react-redux";
 import { Outlet, Navigate } from "react-router-dom";
 
 const PrivateComponent = () => {
-  const auth = localStorage.getItem("token");
+  const { token } = useSelector((state) => state.auth);
 
-  return auth ? <Outlet /> : <Navigate to="signup" />;
+  return token ? <Outlet /> : <Navigate to="signup" />;
 };
 
 export default PrivateComponent;

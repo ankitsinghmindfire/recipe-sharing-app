@@ -1,28 +1,21 @@
-import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutSuccess } from "../../slices/authSlice";
 import "./Navbar.css";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [auth, setAuth] = useState("");
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setAuth(token);
-  }, []);
-
-  console.log("auth", auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { token } = useSelector((state) => state.auth);
 
   const LogoutUser = () => {
-    if (window.confirm("You wanna logout?")) {
-      localStorage.clear();
-      setAuth(false);
-      window.location.href = "/login";
-    } else {
-      window.location.href = "/recipes";
-    }
+    localStorage.clear();
+    dispatch(logoutSuccess());
+    navigate("/login");
   };
 
   const toggleMenu = () => {
@@ -48,7 +41,7 @@ export const Navbar = () => {
         </div>
         <div className={`nav-right ${isOpen ? "open" : ""}`}>
           <ul>
-            {auth ? (
+            {token ? (
               <>
                 <li>
                   <NavLink to="/" onClick={handleToggleMenu}>

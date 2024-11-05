@@ -1,17 +1,16 @@
 import { useState } from "react";
-import { request } from "../../utils/request";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-import "../../App.css";
+import { request } from "../../utils/request";
+import Button from "../../components/button/Button";
 import InputField from "../../components/input/InputField";
+import "../../App.css";
 
 export const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  //   const [_, setCookies] = useCookies(["access_token"]);
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -26,8 +25,6 @@ export const Register = () => {
         method: "POST",
         body: { ...data },
       });
-      console.log("response", response);
-
       if (response) {
         if (response.error) {
           toast.warn(response.error);
@@ -40,6 +37,7 @@ export const Register = () => {
       }
     } catch (error) {
       console.error("An error occurred while registering user:", error);
+      toast.error("An error occurred while registering user");
     }
   };
   return (
@@ -66,7 +64,9 @@ export const Register = () => {
               label="Password"
             />
           </div>
-          <button type="submit">Register</button>
+          <Button type="submit" className="btn-register">
+            Register
+          </Button>
         </form>
       </div>
     </>

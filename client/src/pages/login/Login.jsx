@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { request } from "../../utils/request";
+import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-// import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
+
+import { request } from "../../utils/request";
 import InputField from "../../components/input/InputField";
+import { loginSuccess } from "../../slices/authSlice";
+import Button from "../../components/button/Button";
 import "../../App.css";
 
 export const Login = () => {
@@ -13,6 +16,7 @@ export const Login = () => {
 
   //   const [_, setCookies] = useCookies(["access_token"]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogin = async (event) => {
     try {
@@ -28,12 +32,12 @@ export const Login = () => {
       });
       if (response) {
         if (response.token) {
-          toast.success("Login Successful");
+          dispatch(
+            loginSuccess({ token: response.token, id: response.userId })
+          );
           localStorage.setItem("token", response.token);
-
-          setTimeout(() => {
-            navigate("/");
-          }, 4000);
+          localStorage.setItem("token", response.userId);
+          navigate("/");
         } else {
           toast.error(response.error);
         }
@@ -67,7 +71,9 @@ export const Login = () => {
               label="Password"
             />
           </div>
-          <button type="submit">Login</button>
+          <Button type="submit" className="btn-login">
+            Login
+          </Button>
         </form>
       </div>
     </>
