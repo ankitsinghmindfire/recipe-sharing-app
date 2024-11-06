@@ -1,18 +1,16 @@
 // eslint-disable-next-line react/prop-types
-const InputField = ({ type, value, onChange, label, id, name, key }) => {
+const TextareaField = ({ label, name, value, onChange, id }) => {
   return (
     <>
       <label htmlFor={id}>{label}</label>
-      <input
-        type={type}
+      <textarea
         id={id}
+        name={name}
         value={value}
         onChange={onChange}
-        name={name}
-        key={key}
-      />
+      ></textarea>
     </>
   );
 };
 
-export default InputField;
+export default TextareaField;

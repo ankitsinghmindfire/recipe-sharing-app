@@ -1,17 +1,20 @@
-const mongoose = require("mongoose");
-const mongodb = require("mongodb");
-const { ObjectId } = require("mongodb");
-
 const RecipeModel = require("../models/Recipes");
 
 const createRecipe = async (req, res) => {
-  const { title, ingredients, steps, imageUrl, cookingTime, userOwner } =
-    req.body;
+  const { title, ingredients, steps, cookingTime, userOwner } = req.body;
+
+  if (!title || !ingredients || !steps || !cookingTime) {
+    return res.json({ error: "Missing recipe details" });
+  }
+
   const recipe = new RecipeModel({
     title,
     ingredients,
     steps,
-    imageUrl,
+    image: {
+      data: req.file.buffer, // Store the file buffer (binary data)
+      contentType: req.file.mimetype, // Store the MIME type of the file
+    },
     cookingTime,
     userOwner,
   });

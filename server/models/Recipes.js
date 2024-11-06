@@ -7,7 +7,10 @@ const RecipeSchema = new mongoose.Schema({
   },
   ingredients: [{ type: String, required: true }],
   steps: [{ type: String, required: true }],
-  imageUrl: { type: String, required: true },
+  image: {
+    data: { type: Buffer, required: true },
+    contentType: { type: String, required: true },
+  },
   cookingTime: {
     type: Number,
     required: true,
