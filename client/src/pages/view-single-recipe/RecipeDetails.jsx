@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-
+import { Rating } from "react-simple-star-rating";
 import { request } from "../../utils/request";
 
 export const RecipeDetails = () => {
@@ -47,7 +47,7 @@ export const RecipeDetails = () => {
           <li>
             <h1>{location?.state?.title}</h1>
 
-            <div style={{ margin: "20px", width: "400px" }}>
+            <div style={{ margin: "20px", width: "70%" }}>
               {recipeDetails?.steps?.match(/^\d+\./) ? (
                 <div>
                   {recipeDetails.steps.split("\n").map((step, index) => (
@@ -62,7 +62,14 @@ export const RecipeDetails = () => {
                 </ol>
               )}
             </div>
-            <img src={image} alt={recipeDetails.title} />
+            <img
+              src={image}
+              alt={recipeDetails.title}
+              style={{
+                width: "80%",
+                height: "500px",
+              }}
+            />
             <h3>Ingredients:</h3>
             <ul>
               {recipeDetails?.ingredients?.length > 0 && (
@@ -74,6 +81,19 @@ export const RecipeDetails = () => {
               )}
             </ul>
             <p>Cooking Time: {recipeDetails?.cookingTime} minutes</p>
+            {recipeDetails?.ratingsAndComments?.length > 0 && (
+              <div>
+                <h1>Customer Ratings and Comments</h1>
+                {recipeDetails.ratingsAndComments.map((entry, index) => (
+                  <div key={index}>
+                    <h4>{entry.userName}</h4>
+                    <Rating initialValue={entry.rating} size="15" readonly />
+                    <br />
+                    <p style={{ maxWidth: "80%" }}>{entry.comment}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </li>
         </ul>
       </div>
