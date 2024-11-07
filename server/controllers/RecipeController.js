@@ -48,4 +48,89 @@ const getRecipeById = async (req, res) => {
   }
 };
 
-module.exports = { createRecipe, getAllRecipes, getRecipeById };
+const searchRecipe = async (req, res) => {
+  try {
+    const searchKey = req.params.key.trim();
+
+    const recipes = await RecipeModel.find({
+      ingredients: {
+        $regex: new RegExp(searchKey, "i"),
+      },
+    });
+    if (recipes.length === 0) {
+      return res.status(404).json({ message: "No recipes found" });
+    }
+    res.status(200).json(recipes);
+  } catch (error) {
+    console.error("Error searching recipes:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const addRating = async (req, res) => {
+  try {
+    const { recipeId, rating, userId, userName } = req.body;
+
+    const recipe = await RecipeModel.findById(recipeId);
+    if (!recipe) {
+      return res.status(404).json({ error: "Recipe not found" });
+    }
+
+    // Check if the user has already rated the recipe
+    const index = recipe.ratingsAndComments.findIndex(
+      (entry) => entry.user.toString() === userId.toString()
+    );
+
+    if (index !== -1) {
+      // If the user has already rated, update the existing rating
+      recipe.ratingsAndComments[index].rating = rating;
+    } else {
+      // Otherwise, add a new rating
+      recipe.ratingsAndComments.push({ user: userId, userName, rating });
+    }
+
+    await recipe.save();
+    res.status(200).json({ message: "Rating added successfully" });
+  } catch (error) {
+    console.error("Error adding rating:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+const addComment = async (req, res) => {
+  try {
+    const { recipeId, comment, userId, userName } = req.body;
+
+    const recipe = await RecipeModel.findById(recipeId);
+    if (!recipe) {
+      return res.status(404).json({ error: "Recipe not found" });
+    }
+
+    // Check if the user has already rated the recipe
+    const index = recipe?.ratingsAndComments?.findIndex(
+      (entry) => entry.user.toString() === userId.toString()
+    );
+
+    if (index !== -1) {
+      // If the user has already rated, update the existing rating
+      recipe.ratingsAndComments[index].comment = comment;
+    } else {
+      // Otherwise, add a new rating
+      recipe.ratingsAndComments.push({ user: userId, comment, userName });
+    }
+
+    await recipe.save();
+    res.status(200).json({ message: "Comment added successfully" });
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+module.exports = {
+  createRecipe,
+  getAllRecipes,
+  getRecipeById,
+  searchRecipe,
+  addRating,
+  addComment,
+};

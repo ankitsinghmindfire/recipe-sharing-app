@@ -1,5 +1,14 @@
-// eslint-disable-next-line react/prop-types
-const InputField = ({ type, value, onChange, label, id, name, key }) => {
+/* eslint-disable react/prop-types */
+const InputField = ({
+  type,
+  value,
+  onChange,
+  label,
+  id,
+  name,
+  key,
+  placeholder,
+}) => {
   return (
     <>
       <label htmlFor={id}>{label}</label>
@@ -10,6 +19,7 @@ const InputField = ({ type, value, onChange, label, id, name, key }) => {
         onChange={onChange}
         name={name}
         key={key}
+        placeholder={placeholder}
       />
     </>
   );

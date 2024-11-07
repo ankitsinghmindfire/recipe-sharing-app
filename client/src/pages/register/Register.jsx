@@ -10,6 +10,7 @@ import "../../App.css";
 export const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
 
   const navigate = useNavigate();
 
@@ -19,6 +20,7 @@ export const Register = () => {
       const data = {
         username: username,
         password: password,
+        fullName: name,
       };
       const response = await request({
         url: "auth/register",
@@ -49,6 +51,13 @@ export const Register = () => {
           <div className="form-group">
             <InputField
               type="text"
+              id="name"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              label="Full Name"
+            />
+            <InputField
+              type="email"
               id="username"
               value={username}
               onChange={(event) => setUsername(event.target.value)}

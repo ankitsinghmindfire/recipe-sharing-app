@@ -2,19 +2,17 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import "react-toastify/dist/ReactToastify.css";
-
 import { request } from "../../utils/request";
 import InputField from "../../components/input/InputField";
 import { loginSuccess } from "../../slices/authSlice";
 import Button from "../../components/button/Button";
+import "react-toastify/dist/ReactToastify.css";
 import "../../App.css";
 
 export const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  //   const [_, setCookies] = useCookies(["access_token"]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -33,10 +31,14 @@ export const Login = () => {
       if (response) {
         if (response.token) {
           dispatch(
-            loginSuccess({ token: response.token, id: response.userId })
+            loginSuccess({
+              token: response.token,
+              id: response.userId,
+              userName: response.userName,
+            })
           );
           localStorage.setItem("token", response.token);
-          localStorage.setItem("token", response.userId);
+          localStorage.setItem("userId", response.userId);
           navigate("/");
         } else {
           toast.error(response.error);

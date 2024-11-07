@@ -10,8 +10,6 @@ import "./AddRecipe.css";
 
 export const AddRecipe = () => {
   const { id } = useSelector((state) => state.auth);
-  console.log("id", id);
-
   const [recipe, setRecipe] = useState({
     title: "",
     ingredients: [],
@@ -53,15 +51,15 @@ export const AddRecipe = () => {
   };
 
   const handleSubmit = async (event) => {
-    console.log("recipes", recipe);
     event.preventDefault();
     const formData = new FormData();
     formData.append("title", recipe.title);
-    formData.append("ingredients", JSON.stringify(recipe.ingredients));
+    formData.append("ingredients", recipe.ingredients);
     formData.append("steps", recipe.steps);
     formData.append("cookingTime", recipe.cookingTime);
     formData.append("userOwner", recipe.userOwner);
     formData.append("image", image);
+
     try {
       const response = await request({
         url: "recipe",
@@ -135,7 +133,7 @@ export const AddRecipe = () => {
             onChange={handleChange}
             label={"Cooking Time (minutes)"}
           />
-          <Button type="submit" className={"btn-ingredents"}>
+          <Button type="submit" className={"btn-create-recipe"}>
             Create Recipe
           </Button>
         </form>

@@ -1,5 +1,5 @@
 // eslint-disable-next-line react/prop-types
-const TextareaField = ({ label, name, value, onChange, id }) => {
+const TextareaField = ({ label, name, value, onChange, id, placeholder }) => {
   return (
     <>
       <label htmlFor={id}>{label}</label>
@@ -8,6 +8,7 @@ const TextareaField = ({ label, name, value, onChange, id }) => {
         name={name}
         value={value}
         onChange={onChange}
+        placeholder={placeholder}
       ></textarea>
     </>
   );
