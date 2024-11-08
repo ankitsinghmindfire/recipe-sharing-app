@@ -15,7 +15,5 @@ export const API = {
     rateRecipe: "recipe/rate",
     commentRecipe: "recipe/comment",
     recipeDetails: "recipe/details",
-    filterRatings: "recipe/filter/rating",
-    filterCookingTime: "recipe/filter/cookingTime",
   },
 };

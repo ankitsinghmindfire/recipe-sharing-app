@@ -9,9 +9,9 @@ import { useSelector } from "react-redux";
 import Button from "../../components/button/Button";
 import { API, ApiMethods } from "../../utils/util";
 import { Messages } from "../../utils/messages";
-import "./ViewAllRecipes.css";
 import { DropDown } from "../../components";
 import { cookingTimeData, ratingData } from "../../utils/appConstants";
+import "./ViewAllRecipes.css";
 
 export const ViewAllRecipes = () => {
   const [recipes, setRecipes] = useState([]);
@@ -25,13 +25,15 @@ export const ViewAllRecipes = () => {
     fetchRecipes();
   }, []);
 
-  const fetchRecipes = async () => {
+  const fetchRecipes = async (filters = {}) => {
     try {
+      // Construct query parameters based on the filters provided
+      const queryParams = new URLSearchParams(filters).toString();
+
       const response = await request({
         method: ApiMethods.GET,
-        url: API.recipeAPI.recipe,
+        url: `${API.recipeAPI.recipe}?${queryParams}`,
       });
-
       if (!response.error) {
         const recipeImages = response.map((recipe) => {
           const blob = new Blob([Int8Array.from(recipe.image.data.data)], {
@@ -44,7 +46,7 @@ export const ViewAllRecipes = () => {
         setRecipes(response);
         setImages(recipeImages);
       } else {
-        toast.error(Messages.errors.UNABLE_TO_GET_RECIPES);
+        setRecipes([]);
       }
     } catch (error) {
       console.log(error);
@@ -124,52 +126,21 @@ export const ViewAllRecipes = () => {
       toast.error(Messages.errors.COMMENT_NOT_ADDED);
     }
   };
-  const handleRatingsFilter = async (event) => {
-    try {
-      let response = await request({
-        url: `${API.recipeAPI.filterRatings}/${event.target.value}`,
-        method: ApiMethods.GET,
-      });
-      if (!response.error) {
-        const recipeImages = response.map((recipe) => {
-          const blob = new Blob([Int8Array.from(recipe.image.data.data)], {
-            type: recipe.image.contentType,
-          });
 
-          return window.URL.createObjectURL(blob);
-        });
-
-        setRecipes(response);
-        setImages(recipeImages);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const handleRatingsFilter = (event) => {
+    const rating = event.target.value;
+    fetchRecipes({ rating });
   };
-  const handleCookingTimeFilter = async (event) => {
-    console.log("value", event.target.value);
-    try {
-      let response = await request({
-        url: `${API.recipeAPI.filterCookingTime}/${event.target.value}`,
-        method: ApiMethods.GET,
-      });
-      console.log("response", response);
 
-      if (!response.error) {
-        const recipeImages = response.map((recipe) => {
-          const blob = new Blob([Int8Array.from(recipe.image.data.data)], {
-            type: recipe.image.contentType,
-          });
+  // Handler for cooking time filter
+  const handleCookingTimeFilter = (event) => {
+    const cookingTime = event.target.value;
+    fetchRecipes({ cookingTime });
+  };
 
-          return window.URL.createObjectURL(blob);
-        });
-
-        setRecipes(response);
-        setImages(recipeImages);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  // Handler for resetting filters (optional)
+  const handleResetFilters = () => {
+    fetchRecipes(); // Fetch all recipes when no filters are applied
   };
   return (
     <div style={{ marginTop: "60px" }}>
@@ -190,7 +161,7 @@ export const ViewAllRecipes = () => {
             optionStyle={"stars"}
             onChange={handleRatingsFilter}
           />
-          <Button className={"clear"} onClick={fetchRecipes}>
+          <Button className={"clear"} onClick={handleResetFilters}>
             Clear Filter
           </Button>
         </div>
@@ -200,7 +171,7 @@ export const ViewAllRecipes = () => {
             label="CookingTime  "
             onChange={handleCookingTimeFilter}
           />
-          <Button className={"clear"} onClick={fetchRecipes}>
+          <Button className={"clear"} onClick={handleResetFilters}>
             Clear Filter
           </Button>
         </div>
