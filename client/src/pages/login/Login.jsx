@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { request } from "../../utils/request";
@@ -7,20 +7,24 @@ import InputField from "../../components/input/InputField";
 import { loginSuccess } from "../../slices/authSlice";
 import Button from "../../components/button/Button";
 import { API, ApiMethods } from "../../utils/util";
+import { emailRegex, passwordRegex } from "../../utils/appConstants";
 import { Messages } from "../../utils/messages";
 import "react-toastify/dist/ReactToastify.css";
 import "../../App.css";
 
 export const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm();
 
-  const handleLogin = async (event) => {
+  const onSubmit = async () => {
+    const { username, password } = getValues();
     try {
-      event.preventDefault();
       const data = {
         username: username,
         password: password,
@@ -55,25 +59,41 @@ export const Login = () => {
     <>
       <ToastContainer />
       <div className="auth-container">
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <h2>Login</h2>
           <div className="form-group">
             <InputField
               type="text"
               id="username"
-              value={username}
-              onChange={(event) => setUsername(event.target.value)}
               label="Username"
+              {...register("username", {
+                required: "Username is required",
+                pattern: {
+                  value: emailRegex,
+                  message: Messages.errors.INVALId_USERNAME,
+                },
+              })}
             />
+            {errors.username && (
+              <span className="error">{errors.username.message}</span>
+            )}
           </div>
           <div className="form-group">
             <InputField
               type="password"
               id="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
               label="Password"
+              {...register("password", {
+                required: "Password is required",
+                pattern: {
+                  value: passwordRegex,
+                  message: Messages.errors.INVALID_PASSWORD,
+                },
+              })}
             />
+            {errors.password && (
+              <span className="error">{errors.password.message}</span>
+            )}
           </div>
           <Button type="submit" className="btn-login">
             Login

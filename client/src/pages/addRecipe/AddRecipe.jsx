@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import InputField from "../../components/input/InputField";
 import Button from "../../components/button/Button";
 import TextareaField from "../../components/textarea/TextareaField";
@@ -7,29 +8,30 @@ import { useNavigate } from "react-router-dom";
 import { request } from "../../utils/request";
 import { useSelector } from "react-redux";
 import { API, ApiMethods } from "../../utils/util";
-import "./AddRecipe.css";
 import { Messages } from "../../utils/messages";
+import "./AddRecipe.css";
 
 export const AddRecipe = () => {
   const { id } = useSelector((state) => state.auth);
-  const [recipe, setRecipe] = useState({
-    title: "",
-    ingredients: [],
-    steps: "",
-    cookingTime: 0,
-    userOwner: id,
-  });
   const [image, setImage] = useState(null);
+  const [steps, setSteps] = useState("");
+  const [ingredients, setIngredients] = useState([""]);
   const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      title: "",
+      cookingTime: 0,
+      userOwner: id,
+    },
+  });
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
-
-    if (name === "cookingTime") {
-      setRecipe({ ...recipe, [name]: parseInt(value) || 0 }); // Parse the value as number or fallback to 0 if invalid
-    } else {
-      setRecipe({ ...recipe, [name]: value });
-    }
+    const { value } = event.target;
+    setSteps(value);
   };
 
   // Handle image file selection
@@ -40,26 +42,32 @@ export const AddRecipe = () => {
     }
   };
 
+  // Handle ingredient change
   const handleIngredientChange = (event, index) => {
     const { value } = event.target;
-    const ingredients = [...recipe.ingredients];
-    ingredients[index] = value;
-    setRecipe({ ...recipe, ingredients });
+    const newIngredients = [...ingredients];
+    newIngredients[index] = value; // Update the specific ingredient
+    setIngredients(newIngredients); // Set updated ingredients array
   };
 
+  // Handle adding a new ingredient input field
   const handleAddIngredient = () => {
-    const ingredients = [...recipe.ingredients, ""];
-    setRecipe({ ...recipe, ingredients });
+    setIngredients([...ingredients, ""]); // Add an empty string to the ingredients array
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const onSubmit = async (data) => {
+    if (!ingredients || !steps) {
+      return toast.error(Messages.errors.REQUIRED_FIELDS);
+    }
+    if (!image) {
+      return toast.error(Messages.errors.REQUIRED_IMAGE_FIELDS);
+    }
     const formData = new FormData();
-    formData.append("title", recipe.title);
-    formData.append("ingredients", recipe.ingredients);
-    formData.append("steps", recipe.steps);
-    formData.append("cookingTime", recipe.cookingTime);
-    formData.append("userOwner", recipe.userOwner);
+    formData.append("title", data.title);
+    formData.append("ingredients", ingredients);
+    formData.append("steps", steps);
+    formData.append("cookingTime", data.cookingTime);
+    formData.append("userOwner", data.userOwner);
     formData.append("image", image);
 
     try {
@@ -87,24 +95,26 @@ export const AddRecipe = () => {
       <ToastContainer />
       <div className="create-recipe">
         <h2>Create Recipe</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <InputField
             type="text"
             id="title"
-            name="title"
-            value={recipe.title}
-            onChange={handleChange}
             label="Title"
+            {...register("title", { required: "Title is required" })}
           />
-          {recipe.ingredients.map((ingredient, index) => (
-            <InputField
-              type="text"
-              key={index}
-              name="ingredients"
-              value={ingredient}
-              onChange={(event) => handleIngredientChange(event, index)}
-              label={"Ingredients"}
-            />
+          {errors.title && (
+            <span className="error">{errors.title.message}</span>
+          )}
+          {ingredients.map((ingredient, index) => (
+            <div key={index}>
+              <InputField
+                type="text"
+                key={index}
+                label={"Ingredients"}
+                value={ingredient}
+                onChange={(event) => handleIngredientChange(event, index)}
+              />
+            </div>
           ))}
           <Button
             type="button"
@@ -116,7 +126,7 @@ export const AddRecipe = () => {
           <TextareaField
             id="steps"
             name="steps"
-            value={recipe.steps}
+            value={steps}
             onChange={handleChange}
             label={"Steps"}
           />
@@ -131,10 +141,18 @@ export const AddRecipe = () => {
             type="number"
             id="cookingTime"
             name="cookingTime"
-            value={recipe.cookingTime}
-            onChange={handleChange}
             label={"Cooking Time (minutes)"}
+            {...register("cookingTime", {
+              required: "Cooking Time is required",
+              min: {
+                value: 1,
+                message: "Cooking time must be at least 1 minute",
+              },
+            })}
           />
+          {errors.cookingTime && (
+            <span className="error">{errors.cookingTime.message}</span>
+          )}
           <Button type="submit" className={"btn-create-recipe"}>
             Create Recipe
           </Button>

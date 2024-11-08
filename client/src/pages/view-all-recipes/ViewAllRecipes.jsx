@@ -14,7 +14,7 @@ import "./ViewAllRecipes.css";
 export const ViewAllRecipes = () => {
   const [recipes, setRecipes] = useState([]);
   const [images, setImages] = useState([]);
-  const [comment, setComment] = useState("");
+  const [comments, setComments] = useState({});
   const [rating, setRating] = useState(0);
   const { id, userName } = useSelector((state) => state.auth);
   const navigate = useNavigate();
@@ -95,6 +95,7 @@ export const ViewAllRecipes = () => {
     }
   };
   const handleAddComment = async (recipeId) => {
+    const comment = comments[recipeId]; // Get the comment for the specific recipe
     try {
       if (!comment) {
         return toast.error(Messages.errors.COMMENT_CAN_NOT_EMPTY);
@@ -110,7 +111,7 @@ export const ViewAllRecipes = () => {
         },
       });
       if (!response.error) {
-        setComment("");
+        setComments("");
         toast.success(response.message);
         fetchRecipes();
       } else {
@@ -183,8 +184,13 @@ export const ViewAllRecipes = () => {
               </ul>
               <TextareaField
                 placeholder={"Add comment"}
-                onChange={(event) => setComment(event.target.value)}
-                value={comment}
+                onChange={(event) =>
+                  setComments((prev) => ({
+                    ...prev,
+                    [recipe._id]: event.target.value, // Update the comment for the specific recipe
+                  }))
+                }
+                value={comments[recipe._id] || ""} // Get the comment for the specific recipe
               />
               <br />
               <Button

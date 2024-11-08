@@ -1,24 +1,29 @@
-import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { request } from "../../utils/request";
 import Button from "../../components/button/Button";
 import InputField from "../../components/input/InputField";
-import { API, ApiMethods } from "../../utils/util";
 import { Messages } from "../../utils/messages";
+import { API, ApiMethods } from "../../utils/util";
+import { emailRegex, nameRegex, passwordRegex } from "../../utils/appConstants";
 import "react-toastify/dist/ReactToastify.css";
 import "../../App.css";
 
 export const Register = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm();
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
+  const onSubmit = async () => {
+    const { username, password, name } = getValues();
+
     try {
-      event.preventDefault();
       const data = {
         username: username,
         password: password,
@@ -48,32 +53,56 @@ export const Register = () => {
     <>
       <ToastContainer />
       <div className="auth-container">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <h2>Register</h2>
           <div className="form-group">
             <InputField
               type="text"
               id="name"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
               label="Full Name"
+              {...register("name", {
+                required: "Name is required",
+                pattern: {
+                  value: nameRegex,
+                  message: Messages.errors.INVALID_NAME,
+                },
+              })}
             />
+            {errors.name && (
+              <span className="error">{errors.name.message}</span>
+            )}
             <InputField
-              type="email"
+              type="text"
               id="username"
-              value={username}
-              onChange={(event) => setUsername(event.target.value)}
               label="Username"
+              {...register("username", {
+                required: "Username is required",
+                pattern: {
+                  value: emailRegex,
+                  message: Messages.errors.INVALId_USERNAME,
+                },
+              })}
             />
+            {errors.username && (
+              <span className="error">{errors.username.message}</span>
+            )}
           </div>
           <div className="form-group">
             <InputField
               type="password"
               id="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
               label="Password"
+              {...register("password", {
+                required: "Password is required",
+                pattern: {
+                  value: passwordRegex,
+                  message: Messages.errors.INVALID_PASSWORD,
+                },
+              })}
             />
+            {errors.password && (
+              <span className="error">{errors.password.message}</span>
+            )}
           </div>
           <Button type="submit" className="btn-register">
             Register
