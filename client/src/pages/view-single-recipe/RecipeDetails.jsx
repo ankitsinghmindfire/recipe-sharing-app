@@ -3,18 +3,19 @@ import { useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Rating } from "react-simple-star-rating";
 import { request } from "../../utils/request";
+import { API, ApiMethods } from "../../utils/util";
+import { Messages } from "../../utils/messages";
 
 export const RecipeDetails = () => {
   const [recipeDetails, setRecipeDetails] = useState([]);
   const [image, setImage] = useState("");
-
   const location = useLocation();
 
   const fetchRecipeDetails = async () => {
     try {
       const response = await request({
-        method: "GET",
-        url: "recipe/details",
+        method: ApiMethods.GET,
+        url: API.recipeAPI.recipeDetails,
         params: {
           recipeId: location.state.recipeId,
         },
@@ -23,16 +24,15 @@ export const RecipeDetails = () => {
         const blob = new Blob([Int8Array.from(response.image.data.data)], {
           type: response.image.contentType,
         });
-
         const image = window.URL.createObjectURL(blob);
         setImage(image);
         setRecipeDetails(response);
       } else {
-        toast.error("Unable to fetch recipes, Please try again");
+        toast.error(Messages.errors.UNABLE_TO_GET_RECIPES);
       }
-    } catch (err) {
-      console.log(err);
-      toast.error("Unable to fetch recipes, Please try again");
+    } catch (error) {
+      console.log(error);
+      toast.error(Messages.errors.UNABLE_TO_GET_RECIPES);
     }
   };
   useEffect(() => {

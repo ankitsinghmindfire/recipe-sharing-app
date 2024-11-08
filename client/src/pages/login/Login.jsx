@@ -6,6 +6,8 @@ import { request } from "../../utils/request";
 import InputField from "../../components/input/InputField";
 import { loginSuccess } from "../../slices/authSlice";
 import Button from "../../components/button/Button";
+import { API, ApiMethods } from "../../utils/util";
+import { Messages } from "../../utils/messages";
 import "react-toastify/dist/ReactToastify.css";
 import "../../App.css";
 
@@ -24,8 +26,8 @@ export const Login = () => {
         password: password,
       };
       const response = await request({
-        url: "auth/login",
-        method: "POST",
+        url: API.authAPI.login,
+        method: ApiMethods.POST,
         body: { ...data },
       });
       if (response) {
@@ -45,8 +47,8 @@ export const Login = () => {
         }
       }
     } catch (error) {
-      console.error("Failed to login user:", error);
-      toast.error("Failed to login user");
+      console.error(error);
+      toast.error(Messages.errors.LOGIN_FAILED);
     }
   };
   return (

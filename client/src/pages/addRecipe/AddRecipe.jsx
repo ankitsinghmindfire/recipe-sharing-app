@@ -6,7 +6,9 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { request } from "../../utils/request";
 import { useSelector } from "react-redux";
+import { API, ApiMethods } from "../../utils/util";
 import "./AddRecipe.css";
+import { Messages } from "../../utils/messages";
 
 export const AddRecipe = () => {
   const { id } = useSelector((state) => state.auth);
@@ -62,13 +64,13 @@ export const AddRecipe = () => {
 
     try {
       const response = await request({
-        url: "recipe",
-        method: "POST",
+        url: API.recipeAPI.recipe,
+        method: ApiMethods.POST,
         body: formData,
         headers: { "Content-Type": "multipart/form-data" },
       });
       if (!response.error) {
-        toast.success("Recipe Created");
+        toast.success(Messages.success.RECIPE_CREATED);
         setTimeout(() => {
           navigate("/");
         }, 3000);

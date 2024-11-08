@@ -7,6 +7,8 @@ import InputField from "../../components/input/InputField";
 import TextareaField from "../../components/textarea/TextareaField";
 import { useSelector } from "react-redux";
 import Button from "../../components/button/Button";
+import { API, ApiMethods } from "../../utils/util";
+import { Messages } from "../../utils/messages";
 import "./ViewAllRecipes.css";
 
 export const ViewAllRecipes = () => {
@@ -24,8 +26,8 @@ export const ViewAllRecipes = () => {
   const fetchRecipes = async () => {
     try {
       const response = await request({
-        method: "GET",
-        url: "recipe",
+        method: ApiMethods.GET,
+        url: API.recipeAPI.recipe,
       });
 
       if (!response.error) {
@@ -40,10 +42,10 @@ export const ViewAllRecipes = () => {
         setRecipes(response);
         setImages(recipeImages);
       } else {
-        toast.error("Unable to fetch recipes, Please try again");
+        toast.error(Messages.errors.UNABLE_TO_GET_RECIPES);
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -51,8 +53,8 @@ export const ViewAllRecipes = () => {
     try {
       if (e.target.value) {
         let Searchedrecipes = await request({
-          url: `searchRecipes/${e.target.value}`,
-          method: "GET",
+          url: `${API.recipeAPI.searchRecipes}/${e.target.value}`,
+          method: ApiMethods.GET,
         });
         if (!Searchedrecipes.message) {
           setRecipes(Searchedrecipes);
@@ -62,17 +64,17 @@ export const ViewAllRecipes = () => {
       } else {
         fetchRecipes();
       }
-    } catch (e) {
-      console.log(e);
-      toast.error("Unable to search recipes, Please try again");
+    } catch (error) {
+      console.log(error);
+      toast.error(Messages.errors.UNABLE_TO_SEARCH);
     }
   };
 
   const handleRating = async (rating, recipeId) => {
     try {
       const response = await request({
-        url: "recipe/rate",
-        method: "POST",
+        url: API.recipeAPI.rateRecipe,
+        method: ApiMethods.POST,
         body: {
           rating: rating,
           recipeId: recipeId,
@@ -89,17 +91,17 @@ export const ViewAllRecipes = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error("Unable to add rating, Please try again");
+      toast.error(Messages.errors.RATING_NOT_ADDED);
     }
   };
   const handleAddComment = async (recipeId) => {
     try {
       if (!comment) {
-        return toast.error("Please enter comment");
+        return toast.error(Messages.errors.COMMENT_CAN_NOT_EMPTY);
       }
       const response = await request({
-        url: "recipe/comment",
-        method: "POST",
+        url: API.recipeAPI.commentRecipe,
+        method: ApiMethods.POST,
         body: {
           comment: comment,
           recipeId: recipeId,
@@ -116,7 +118,7 @@ export const ViewAllRecipes = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error("Unable to add comment, Please try again");
+      toast.error(Messages.errors.COMMENT_NOT_ADDED);
     }
   };
 
@@ -217,7 +219,7 @@ export const ViewAllRecipes = () => {
           ))}
         </ul>
       ) : (
-        <h2>No Recipes Found</h2>
+        <h2>{Messages.success.RECIPE_NOT_FOUND}</h2>
       )}
     </div>
   );

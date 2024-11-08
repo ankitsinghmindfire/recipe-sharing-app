@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { request } from "../../utils/request";
 import Button from "../../components/button/Button";
 import InputField from "../../components/input/InputField";
+import { API, ApiMethods } from "../../utils/util";
+import { Messages } from "../../utils/messages";
+import "react-toastify/dist/ReactToastify.css";
 import "../../App.css";
 
 export const Register = () => {
@@ -23,8 +25,8 @@ export const Register = () => {
         fullName: name,
       };
       const response = await request({
-        url: "auth/register",
-        method: "POST",
+        url: API.authAPI.register,
+        method: ApiMethods.POST,
         body: { ...data },
       });
       if (response) {
@@ -38,8 +40,8 @@ export const Register = () => {
         }
       }
     } catch (error) {
-      console.error("An error occurred while registering user:", error);
-      toast.error("An error occurred while registering user");
+      console.error(error);
+      toast.error(Messages.errors.USER_NOT_REGISTERED);
     }
   };
   return (

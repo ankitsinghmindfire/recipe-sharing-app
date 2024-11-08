@@ -62,7 +62,6 @@ const searchRecipe = async (req, res) => {
     }
     res.status(200).json(recipes);
   } catch (error) {
-    console.error("Error searching recipes:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
