@@ -45,6 +45,8 @@ export const Login = () => {
           );
           localStorage.setItem("token", response.token);
           localStorage.setItem("userId", response.userId);
+          localStorage.setItem("userName", response.userName);
+
           navigate("/");
         } else {
           toast.error(response.error);

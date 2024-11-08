@@ -34,8 +34,6 @@ const RecipeSchema = new mongoose.Schema({
   ],
   averageRating: {
     type: Number,
-    min: 1,
-    max: 5,
   },
 });
 module.exports = mongoose.model("Recipes", RecipeSchema);
