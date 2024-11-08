@@ -8,6 +8,8 @@ const {
   searchRecipe,
   addRating,
   addComment,
+  filterRecipeUsingRating,
+  filterRecipeUsinCookingTime,
 } = require("../controllers/RecipeController");
 const verifyToken = require("../middleware/middleware");
 
@@ -21,5 +23,10 @@ router.get("/recipe/details", getRecipeById);
 router.get("/searchRecipes/:key", searchRecipe);
 router.post("/recipe/rate", verifyToken, addRating);
 router.post("/recipe/comment", verifyToken, addComment);
+router.get("/recipe/filter/rating/:rating", filterRecipeUsingRating);
+router.get(
+  "/recipe/filter/cookingTime/:cookingTime",
+  filterRecipeUsinCookingTime
+);
 
 module.exports = router;

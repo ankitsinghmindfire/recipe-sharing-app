@@ -10,6 +10,8 @@ import Button from "../../components/button/Button";
 import { API, ApiMethods } from "../../utils/util";
 import { Messages } from "../../utils/messages";
 import "./ViewAllRecipes.css";
+import { DropDown } from "../../components";
+import { cookingTimeData, ratingData } from "../../utils/appConstants";
 
 export const ViewAllRecipes = () => {
   const [recipes, setRecipes] = useState([]);
@@ -122,9 +124,55 @@ export const ViewAllRecipes = () => {
       toast.error(Messages.errors.COMMENT_NOT_ADDED);
     }
   };
+  const handleRatingsFilter = async (event) => {
+    try {
+      let response = await request({
+        url: `${API.recipeAPI.filterRatings}/${event.target.value}`,
+        method: ApiMethods.GET,
+      });
+      if (!response.error) {
+        const recipeImages = response.map((recipe) => {
+          const blob = new Blob([Int8Array.from(recipe.image.data.data)], {
+            type: recipe.image.contentType,
+          });
 
+          return window.URL.createObjectURL(blob);
+        });
+
+        setRecipes(response);
+        setImages(recipeImages);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleCookingTimeFilter = async (event) => {
+    console.log("value", event.target.value);
+    try {
+      let response = await request({
+        url: `${API.recipeAPI.filterCookingTime}/${event.target.value}`,
+        method: ApiMethods.GET,
+      });
+      console.log("response", response);
+
+      if (!response.error) {
+        const recipeImages = response.map((recipe) => {
+          const blob = new Blob([Int8Array.from(recipe.image.data.data)], {
+            type: recipe.image.contentType,
+          });
+
+          return window.URL.createObjectURL(blob);
+        });
+
+        setRecipes(response);
+        setImages(recipeImages);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
-    <div style={{ marginTop: "90px" }}>
+    <div style={{ marginTop: "60px" }}>
       <ToastContainer />
       <div className="search-bar">
         <InputField
@@ -133,6 +181,29 @@ export const ViewAllRecipes = () => {
           placeholder="Search recipes"
           onChange={(e) => SearchRecipes(e)}
         />
+      </div>
+      <div className="filters">
+        <div className="rating-filter">
+          <DropDown
+            itemsList={ratingData}
+            label="Ratings  "
+            optionStyle={"stars"}
+            onChange={handleRatingsFilter}
+          />
+          <Button className={"clear"} onClick={fetchRecipes}>
+            Clear Filter
+          </Button>
+        </div>
+        <div className="time-filter">
+          <DropDown
+            itemsList={cookingTimeData}
+            label="CookingTime  "
+            onChange={handleCookingTimeFilter}
+          />
+          <Button className={"clear"} onClick={fetchRecipes}>
+            Clear Filter
+          </Button>
+        </div>
       </div>
       <h1>Recipes</h1>
       {recipes.length > 0 ? (
@@ -172,6 +243,10 @@ export const ViewAllRecipes = () => {
                   });
                 }}
               />
+              <div>
+                <h3>Average Rating</h3>
+                <Rating readonly initialValue={recipe?.averageRating} />
+              </div>
               <h3>Ingredients:</h3>
               <ul>
                 {recipe.ingredients.length > 0 && (
@@ -184,6 +259,7 @@ export const ViewAllRecipes = () => {
               </ul>
               <TextareaField
                 placeholder={"Add comment"}
+                className="add-comment"
                 onChange={(event) =>
                   setComments((prev) => ({
                     ...prev,
