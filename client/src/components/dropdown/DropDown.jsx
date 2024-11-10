@@ -42,5 +42,5 @@ DropDown.propTypes = {
   label: PropTypes.string.isRequired,
   optionStyle: PropTypes.string.isRequired,
   onChange: PropTypes.func,
-  itemsList: PropTypes.arrayOf(PropTypes.number).isRequired, // itemsList should be an array of strings and is required
+  itemsList: PropTypes.arrayOf(PropTypes.number).isRequired, 
 };

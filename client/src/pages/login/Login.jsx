@@ -12,6 +12,7 @@ import { Messages } from "../../utils/messages";
 import "react-toastify/dist/ReactToastify.css";
 import "../../App.css";
 
+/** handle login function */
 export const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();

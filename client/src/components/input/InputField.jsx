@@ -1,10 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const InputField = React.forwardRef(({ label, error, ...props }, ref) => {
+const InputField = React.forwardRef(({ label, error,isBr, ...props }, ref) => {
   return (
     <div>
-      <label htmlFor={props?.id}>{label}</label> <br />
+      <label htmlFor={props?.id}>{label}</label>
+      { !isBr && <br />}
       <input ref={ref} {...props} />
       <span className="error">{error}</span>
     </div>
@@ -16,6 +17,7 @@ InputField.displayName = "InputField";
 
 // Prop validation with PropTypes
 InputField.propTypes = {
+  isBr:PropTypes.boolean,
   label: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   error: PropTypes.string.isRequired,

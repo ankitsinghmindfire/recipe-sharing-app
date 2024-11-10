@@ -34,7 +34,7 @@ export const AddRecipe = () => {
     setSteps(value);
   };
 
-  // Handle image file selection
+  /** Handle image file selection */
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -42,17 +42,17 @@ export const AddRecipe = () => {
     }
   };
 
-  // Handle ingredient change
+  /** Handle ingredient change */ 
   const handleIngredientChange = (event, index) => {
     const { value } = event.target;
     const newIngredients = [...ingredients];
-    newIngredients[index] = value; // Update the specific ingredient
-    setIngredients(newIngredients); // Set updated ingredients array
+    newIngredients[index] = value; /** Update the specific ingredient  */ 
+    setIngredients(newIngredients); /** Set updated ingredients array */ 
   };
 
-  // Handle adding a new ingredient input field
+  /** Handle adding a new ingredient input field */
   const handleAddIngredient = () => {
-    setIngredients([...ingredients, '']); // Add an empty string to the ingredients array
+    setIngredients([...ingredients, '']); /** Add an empty string to the ingredients array */ 
   };
 
   const onSubmit = async (data) => {

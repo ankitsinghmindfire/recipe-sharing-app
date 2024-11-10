@@ -35,6 +35,7 @@ export const ViewAllRecipes = () => {
         url: `${API.recipeAPI.recipe}?${queryParams}`,
       });
       if (!response.error) {
+         // Generate Blob URLs for each recipe image
         const recipeImages = response.map((recipe) => {
           const blob = new Blob([Int8Array.from(recipe.image.data.data)], {
             type: recipe.image.contentType,
@@ -46,7 +47,7 @@ export const ViewAllRecipes = () => {
         setRecipes(response);
         setImages(recipeImages);
       } else {
-        setRecipes([]);
+        setRecipes([]); // Clear recipes if there's an error
       }
     } catch (error) {
       console.log(error);
@@ -55,11 +56,13 @@ export const ViewAllRecipes = () => {
 
   const SearchRecipes = async (e) => {
     try {
+       // If there's a search term, fetch searched recipes
       if (e.target.value) {
         let Searchedrecipes = await request({
           url: `${API.recipeAPI.searchRecipes}/${e.target.value}`,
           method: ApiMethods.GET,
         });
+         // Set the searched recipes or empty if none found
         if (!Searchedrecipes.message) {
           setRecipes(Searchedrecipes);
         } else {
@@ -75,6 +78,7 @@ export const ViewAllRecipes = () => {
   };
 
   const handleRating = async (rating, recipeId) => {
+      // Send the rating data to the backend to save it
     try {
       const response = await request({
         url: API.recipeAPI.rateRecipe,
@@ -89,9 +93,9 @@ export const ViewAllRecipes = () => {
       if (!response.error) {
         setRating(0);
         toast.success(response.message);
-        fetchRecipes();
+        fetchRecipes();  // Re-fetch the recipes to show updated ratings
       } else {
-        toast.error(response?.error);
+        toast.error(response?.error);// Show error message if rating fails
       }
     } catch (error) {
       console.log(error);
@@ -101,9 +105,12 @@ export const ViewAllRecipes = () => {
   const handleAddComment = async (recipeId) => {
     const comment = comments[recipeId]; // Get the comment for the specific recipe
     try {
+       // Ensure that the comment is not empty before proceeding
       if (!comment) {
         return toast.error(Messages.errors.COMMENT_CAN_NOT_EMPTY);
       }
+
+       // Send the comment to the backend to save it
       const response = await request({
         url: API.recipeAPI.commentRecipe,
         method: ApiMethods.POST,
@@ -117,7 +124,7 @@ export const ViewAllRecipes = () => {
       if (!response.error) {
         setComments("");
         toast.success(response.message);
-        fetchRecipes();
+        fetchRecipes();// Re-fetch recipes to show updated comments
       } else {
         toast.error(response?.error);
       }
@@ -129,13 +136,13 @@ export const ViewAllRecipes = () => {
 
   const handleRatingsFilter = (event) => {
     const rating = event.target.value;
-    fetchRecipes({ rating });
+    fetchRecipes({ rating });  // Fetch recipes with the selected rating filter
   };
 
   // Handler for cooking time filter
   const handleCookingTimeFilter = (event) => {
     const cookingTime = event.target.value;
-    fetchRecipes({ cookingTime });
+    fetchRecipes({ cookingTime });  // Fetch recipes with the selected cooking time filter
   };
 
   // Handler for resetting filters (optional)
@@ -144,19 +151,12 @@ export const ViewAllRecipes = () => {
   };
   return (
     <div style={{ marginTop: "60px" }}>
+      <h1>Recipes</h1>
       <ToastContainer />
-      <div className="search-bar">
-        <InputField
-          type="text"
-          className="search-input"
-          placeholder="Search recipes"
-          onChange={(e) => SearchRecipes(e)}
-        />
-      </div>
-      <div className="filters">
+      <div className="filters">     
         <div className="rating-filter">
           <DropDown
-            itemsList={ratingData}
+            itemsList={ratingData} // Dropdown for rating filter
             label="Ratings  "
             optionStyle={"stars"}
             onChange={handleRatingsFilter}
@@ -167,18 +167,27 @@ export const ViewAllRecipes = () => {
         </div>
         <div className="time-filter">
           <DropDown
-            itemsList={cookingTimeData}
+            itemsList={cookingTimeData}  // Dropdown for cooking time filter
             label="CookingTime  "
             onChange={handleCookingTimeFilter}
+            optionStyle={"time"}
           />
           <Button className={"clear"} onClick={handleResetFilters}>
             Clear Filter
           </Button>
         </div>
+        <div className="search-bar">
+        <InputField
+          type="text"
+          className="search-input"
+          placeholder="Search recipes"
+          onChange={(e) => SearchRecipes(e)}
+          isBr={true}
+        />
+        </div>
       </div>
-      <h1>Recipes</h1>
       {recipes.length > 0 ? (
-        <ul style={{ display: "flex", flexWrap: "wrap" }}>
+        <ul style={{ display: "flex", flexWrap: "wrap",justifyContent:"space-around" }}>
           {recipes?.map((recipe, index) => (
             <li key={recipe._id}>
               <div>
@@ -202,7 +211,7 @@ export const ViewAllRecipes = () => {
                 )}
               </div>
               <img
-                src={images[index]}
+                src={images[index]} // Display the image for the recipe
                 alt={recipe.title}
                 onClick={() => {
                   navigate();
@@ -216,7 +225,7 @@ export const ViewAllRecipes = () => {
               />
               <div>
                 <h3>Average Rating</h3>
-                <Rating readonly initialValue={recipe?.averageRating} />
+                <Rating readonly initialValue={recipe?.averageRating} /> {/* Display recipe average rating */}
               </div>
               <h3>Ingredients:</h3>
               <ul>
@@ -243,21 +252,24 @@ export const ViewAllRecipes = () => {
               <Button
                 className={"btn-add-comment"}
                 type="button"
-                onClick={() => handleAddComment(recipe._id)}
+                onClick={() => handleAddComment(recipe._id)} // Handle comment submission
               >
                 Add comment
               </Button>
               <br />
               <Rating
-                onClick={(rate) => handleRating(rate, recipe._id)}
+                onClick={(rate) => handleRating(rate, recipe._id)}  // Handle rating submission
                 emptyColor="gray"
                 initialValue={rating}
                 value={rating}
               />
               <p>Cooking Time: {recipe.cookingTime} minutes</p>
+
               {recipe.ratingsAndComments.length > 0 && (
                 <div style={{ width: "400px" }}>
+
                   <h1>Customer Ratings and Comments</h1>
+                  
                   {recipe.ratingsAndComments.map((entry, index) => (
                     <div key={index}>
                       <h4>{entry.userName}</h4>

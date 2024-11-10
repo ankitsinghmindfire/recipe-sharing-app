@@ -12,12 +12,14 @@ export const Navbar = () => {
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
 
+  /**  Function to handle user logout*/
   const LogoutUser = () => {
     localStorage.clear();
     dispatch(logoutSuccess());
     navigate("/login");
   };
 
+  /**  Function to close the hamburger menu when a link is clicked */
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -54,11 +56,6 @@ export const Navbar = () => {
                     Add Recipe
                   </NavLink>{" "}
                 </li>
-                {/* <li>
-                  <NavLink to="/favouriteRecipes" onClick={handleToggleMenu}>
-                    Favourites
-                  </NavLink>{" "}
-                </li> */}
                 <li>
                   <NavLink to="login" onClick={LogoutUser}>
                     Logout

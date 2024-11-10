@@ -26,17 +26,24 @@
 .stars {
   color: orange;
   outline: none;
+  padding: 10px;
+}
+.time{
+  padding: 10px;
+
 }
 .filters {
   display: flex;
   align-items: center;
   margin-left: 20px;
+  flex-wrap: wrap;
 }
 
 .rating-filter {
   display: flex;
   align-items: center;
   margin-right: 20px;
+
 }
 
 .time-filter {
