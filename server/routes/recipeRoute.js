@@ -9,7 +9,6 @@ const {
   addComment,
   fetchRecipes,
 } = require("../controllers/RecipeController");
-const verifyToken = require("../middleware/middleware");
 
 // Setup Multer for handling file uploads
 const storage = multer.memoryStorage(); // Store file in memory (as buffer)
@@ -18,8 +17,8 @@ const upload = multer({ storage: storage });
 router.post("/recipe", upload.single("image"), createRecipe); // 'image' is the name of the form field
 router.get("/recipe/details", getRecipeById);
 router.get("/searchRecipes/:key", searchRecipe);
-router.post("/recipe/rate", verifyToken, addRating);
-router.post("/recipe/comment", verifyToken, addComment);
+router.post("/recipe/rate", addRating);
+router.post("/recipe/comment", addComment);
 router.get("/recipe", fetchRecipes);
 
 module.exports = router;

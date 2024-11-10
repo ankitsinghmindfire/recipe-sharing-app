@@ -1,32 +1,32 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import InputField from "../../components/input/InputField";
-import Button from "../../components/button/Button";
-import TextareaField from "../../components/textarea/TextareaField";
-import { ToastContainer, toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { request } from "../../utils/request";
-import { useSelector } from "react-redux";
-import { API, ApiMethods } from "../../utils/util";
-import { Messages } from "../../utils/messages";
-import "./AddRecipe.css";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import InputField from '../../components/input/InputField';
+import Button from '../../components/button/Button';
+import TextareaField from '../../components/textarea/TextareaField';
+import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { request } from '../../utils/request';
+import { useSelector } from 'react-redux';
+import { API, ApiMethods } from '../../utils/util';
+import { Messages } from '../../utils/messages';
+import './AddRecipe.css';
 
 export const AddRecipe = () => {
   const { id } = useSelector((state) => state.auth);
   const [image, setImage] = useState(null);
-  const [steps, setSteps] = useState("");
-  const [ingredients, setIngredients] = useState([""]);
+  const [steps, setSteps] = useState('');
+  const [ingredients, setIngredients] = useState(['']);
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm({
     defaultValues: {
-      title: "",
+      title: '',
       cookingTime: 0,
-      userOwner: id,
-    },
+      userOwner: id
+    }
   });
 
   const handleChange = (event) => {
@@ -52,7 +52,7 @@ export const AddRecipe = () => {
 
   // Handle adding a new ingredient input field
   const handleAddIngredient = () => {
-    setIngredients([...ingredients, ""]); // Add an empty string to the ingredients array
+    setIngredients([...ingredients, '']); // Add an empty string to the ingredients array
   };
 
   const onSubmit = async (data) => {
@@ -63,24 +63,24 @@ export const AddRecipe = () => {
       return toast.error(Messages.errors.REQUIRED_IMAGE_FIELDS);
     }
     const formData = new FormData();
-    formData.append("title", data.title);
-    formData.append("ingredients", ingredients);
-    formData.append("steps", steps);
-    formData.append("cookingTime", data.cookingTime);
-    formData.append("userOwner", data.userOwner);
-    formData.append("image", image);
+    formData.append('title', data.title);
+    formData.append('ingredients', ingredients);
+    formData.append('steps', steps);
+    formData.append('cookingTime', data.cookingTime);
+    formData.append('userOwner', data.userOwner);
+    formData.append('image', image);
 
     try {
       const response = await request({
         url: API.recipeAPI.recipe,
         method: ApiMethods.POST,
         body: formData,
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: { 'Content-Type': 'multipart/form-data' }
       });
       if (!response.error) {
         toast.success(Messages.success.RECIPE_CREATED);
         setTimeout(() => {
-          navigate("/");
+          navigate('/');
         }, 3000);
       } else {
         toast.error(response.error);
@@ -100,27 +100,21 @@ export const AddRecipe = () => {
             type="text"
             id="title"
             label="Title"
-            {...register("title", { required: "Title is required" })}
+            {...register('title', { required: 'Title is required' })}
           />
-          {errors.title && (
-            <span className="error">{errors.title.message}</span>
-          )}
+          {errors.title && <span className="error">{errors.title.message}</span>}
           {ingredients.map((ingredient, index) => (
             <div key={index}>
               <InputField
                 type="text"
                 key={index}
-                label={"Ingredients"}
+                label={'Ingredients'}
                 value={ingredient}
                 onChange={(event) => handleIngredientChange(event, index)}
               />
             </div>
           ))}
-          <Button
-            type="button"
-            onClick={handleAddIngredient}
-            className={"btn-ingredents"}
-          >
+          <Button type="button" onClick={handleAddIngredient} className={'btn-ingredents'}>
             Add Ingredient
           </Button>
           <TextareaField
@@ -128,32 +122,30 @@ export const AddRecipe = () => {
             name="steps"
             value={steps}
             onChange={handleChange}
-            label={"Steps"}
+            label={'Steps'}
           />
           <InputField
             type="file"
             id="image"
             name="image"
             onChange={handleImageChange}
-            label={"Upload Image"}
+            label={'Upload Image'}
           />
           <InputField
             type="number"
             id="cookingTime"
             name="cookingTime"
-            label={"Cooking Time (minutes)"}
-            {...register("cookingTime", {
-              required: "Cooking Time is required",
+            label={'Cooking Time (minutes)'}
+            {...register('cookingTime', {
+              required: 'Cooking Time is required',
               min: {
                 value: 1,
-                message: "Cooking time must be at least 1 minute",
-              },
+                message: 'Cooking time must be at least 1 minute'
+              }
             })}
           />
-          {errors.cookingTime && (
-            <span className="error">{errors.cookingTime.message}</span>
-          )}
-          <Button type="submit" className={"btn-create-recipe"}>
+          {errors.cookingTime && <span className="error">{errors.cookingTime.message}</span>}
+          <Button type="submit" className={'btn-create-recipe'}>
             Create Recipe
           </Button>
         </form>
