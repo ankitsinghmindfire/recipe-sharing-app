@@ -1,3 +1,5 @@
+// eslint-disable-next-line no-unused-vars
+import React from 'react';
 import PropTypes from 'prop-types';
 
 export const DropDown = ({
@@ -7,6 +9,7 @@ export const DropDown = ({
   label,
   optionStyle,
   onChange,
+  dataTestId,
 }) => {
   return (
     <div
@@ -16,13 +19,14 @@ export const DropDown = ({
         alignItems: 'baseline',
       }}
     >
-      <label>{label}</label> &nbsp;&nbsp;
+      <label htmlFor={id}>{label}</label> &nbsp;&nbsp;
       <select
         name={name}
         id={id}
         style={{ borderRadius: '5px', outline: 'none', margin: '10px' }}
         className={optionStyle}
         onChange={onChange}
+        data-test-id={dataTestId}
       >
         {itemsList.map((item, index) => {
           return (
@@ -42,5 +46,11 @@ DropDown.propTypes = {
   label: PropTypes.string.isRequired,
   optionStyle: PropTypes.string.isRequired,
   onChange: PropTypes.func,
-  itemsList: PropTypes.arrayOf(PropTypes.number).isRequired,
+  itemsList: PropTypes.arrayOf(
+    PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      value: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+  dataTestId: PropTypes.string,
 };

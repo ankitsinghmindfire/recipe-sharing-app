@@ -50,7 +50,6 @@ export const Register = () => {
     }
   };
 
-  
   return (
     <>
       <ToastContainer />
