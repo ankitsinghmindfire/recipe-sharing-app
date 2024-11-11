@@ -1,4 +1,4 @@
-import  React, {useState } from 'react';
+import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutSuccess } from '../../slices/authSlice';
@@ -32,10 +32,11 @@ export const Navbar = () => {
       <nav>
         <div className="nav-left">
           <img
-          src={menu}
-          className="hamburger-icon"
-          onClick={toggleMenu}
-          style={isOpen ? { transform: 'rotate(90deg)' } : {}}
+            src={menu}
+            className="hamburger-icon"
+            onClick={toggleMenu}
+            style={isOpen ? { transform: 'rotate(90deg)' } : {}}
+            role="button"
           />
           <h2>Recipe Sharing App</h2>
         </div>

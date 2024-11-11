@@ -3,10 +3,10 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import { Provider } from 'react-redux';
-import { store } from '../../app/store';
 import authReducer from '../../slices/authSlice';
-import { logoutSuccess } from '../../slices/authSlice';
 import { configureStore } from '@reduxjs/toolkit';
+import { logoutSuccess } from '../../slices/authSlice';
+import { createMemoryHistory } from 'history';
 
 // Mock Redux store with initial state
 const mockStore = (initialState) => {
@@ -57,78 +57,50 @@ describe('Navbar Component', () => {
     expect(screen.getByText(/Login/i)).toBeInTheDocument();
     expect(screen.getByText(/SignUp/i)).toBeInTheDocument();
   });
+  it('logs out and redirects to login page on Logout click', () => {
+    const initialState = {
+      auth: { token: 'fake_token' },
+    };
+    const store = mockStore(initialState);
 
-  //   // Test hamburger menu toggle functionality
-  //   test('should toggle hamburger menu visibility on click', () => {
-  //     render(
-  //       <Provider store={store}>
-  //         <Router>
-  //           <Navbar />
-  //         </Router>
-  //       </Provider>
-  //     );
+    // Mock functions for navigation and local storage
+    const mockNavigate = jest.fn();
+    const mockClear = jest.spyOn(Storage.prototype, 'clear');
+    store.dispatch = jest.fn();
 
-  //     // Initially, the menu should not be visible
-  //     expect(screen.queryByText(/Recipes/i)).toBeNull();
+    // Setup history for Router
+    const history = createMemoryHistory();
 
-  //     // Click on the hamburger icon to open the menu
-  //     fireEvent.click(screen.getByRole('button', { name: /bars/i }));
+    render(
+      <Provider store={store}>
+        <Router location={history.location} navigator={history}>
+          <Navbar />
+        </Router>
+      </Provider>
+    );
 
-  //     // Now, the menu should be visible
-  //     expect(screen.getByText(/Recipes/i)).toBeInTheDocument();
-  //   });
+    // Locate the Logout link
+    const logoutLink = screen.getByText(/Logout/i);
+    expect(logoutLink).toBeInTheDocument();
 
-  //   // Test logout functionality
-  //   test('logs out and redirects to login page', () => {
-  //     // Mock the state of logged in user (with token)
-  //     const initialState = {
-  //       auth: { token: 'fake_token' }
-  //     };
+    // Simulate click on Logout link
+    fireEvent.click(logoutLink);
 
-  //     // Mock the navigate function
-  //     const mockNavigate = jest.fn();
+    // Assert that local storage was cleared, logout action was dispatched, and navigation occurred
+    expect(mockClear).toHaveBeenCalled();
+    expect(store.dispatch).toHaveBeenCalledWith(logoutSuccess());
+    expect(history.location.pathname).toBe('/');
+  });
+  // Test the correct closing of the menu on a link click
+  it('closes the menu when a link is clicked', () => {
+    const initialState = {
+      auth: { token: 'fake_token' },
+    };
 
-  //     render(
-  //       <Provider store={{ ...store, getState: () => initialState }}>
-  //         <Router>
-  //           <Navbar navigate={mockNavigate} />
-  //         </Router>
-  //       </Provider>
-  //     );
+    renderWithProviders(<Navbar />, { initialState });
 
-  //     // Simulate the user clicking on the "Logout" link
-  //     fireEvent.click(screen.getByText(/Logout/i));
-
-  //     // Ensure localStorage.clear is called
-  //     expect(localStorage.clear).toHaveBeenCalled();
-
-  //     // Check if logout action was dispatched
-  //     expect(store.dispatch).toHaveBeenCalledWith(logoutSuccess());
-
-  //     // Ensure the user is navigated to the login page
-  //     expect(mockNavigate).toHaveBeenCalledWith('/login');
-  //   });
-
-  //   // Test the correct closing of the menu on a link click
-  //   test('closes the menu when a link is clicked', () => {
-  //     render(
-  //       <Provider store={store}>
-  //         <Router>
-  //           <Navbar />
-  //         </Router>
-  //       </Provider>
-  //     );
-
-  //     // Open the menu
-  //     fireEvent.click(screen.getByRole('button', { name: /bars/i }));
-
-  //     // Check that the menu opens
-  //     expect(screen.getByText(/Recipes/i)).toBeInTheDocument();
-
-  //     // Click on the Recipes link
-  //     fireEvent.click(screen.getByText(/Recipes/i));
-
-  //     // Check that the menu is closed
-  //     expect(screen.queryByText(/Recipes/i)).not.toBeInTheDocument();
-  //   });
+    fireEvent.click(screen.getByRole('button'));
+    expect(screen.getByText(/Recipes/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByText(/Recipes/i));
+  });
 });

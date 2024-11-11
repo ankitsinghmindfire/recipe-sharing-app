@@ -1,3 +1,3 @@
-import menu from "./menu.svg";
+import menu from './menu.svg';
 
-export {menu};
+export { menu };
