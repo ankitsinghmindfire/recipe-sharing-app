@@ -49,9 +49,12 @@ export const Register = () => {
       toast.error(Messages.errors.USER_NOT_REGISTERED);
     }
   };
+
+  
   return (
     <>
       <ToastContainer />
+
       <div className="auth-container">
         <form onSubmit={handleSubmit(onSubmit)}>
           <h2>Register</h2>
