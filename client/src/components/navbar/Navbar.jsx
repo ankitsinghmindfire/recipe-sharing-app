@@ -1,9 +1,8 @@
-import { useState } from 'react';
+import  React, {useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutSuccess } from '../../slices/authSlice';
+import { menu } from '../../assets';
 import './Navbar.css';
 
 export const Navbar = () => {
@@ -32,13 +31,12 @@ export const Navbar = () => {
     <div>
       <nav>
         <div className="nav-left">
-          <FontAwesomeIcon
-            icon={faBars}
-            className="hamburger-icon"
-            onClick={toggleMenu}
-            style={isOpen ? { transform: 'rotate(90deg)' } : {}}
+          <img
+          src={menu}
+          className="hamburger-icon"
+          onClick={toggleMenu}
+          style={isOpen ? { transform: 'rotate(90deg)' } : {}}
           />
-
           <h2>Recipe Sharing App</h2>
         </div>
         <div className={`nav-right ${isOpen ? 'open' : ''}`}>

@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import Button from '../../components/button/Button';
 import { API, ApiMethods } from '../../utils/util';
 import { Messages } from '../../utils/messages';
-import { DropDown } from '../../components';
+import { DropDown } from '../../components/dropdown/DropDown';
 import { cookingTimeData, ratingData } from '../../utils/appConstants';
 import './ViewAllRecipes.css';
 
