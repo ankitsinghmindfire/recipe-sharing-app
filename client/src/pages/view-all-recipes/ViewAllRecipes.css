@@ -28,9 +28,8 @@
   outline: none;
   padding: 10px;
 }
-.time{
+.time {
   padding: 10px;
-
 }
 .filters {
   display: flex;
@@ -43,7 +42,6 @@
   display: flex;
   align-items: center;
   margin-right: 20px;
-
 }
 
 .time-filter {

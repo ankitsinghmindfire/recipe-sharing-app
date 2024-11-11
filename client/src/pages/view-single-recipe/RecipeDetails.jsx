@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import { Rating } from "react-simple-star-rating";
-import { request } from "../../utils/request";
-import { API, ApiMethods } from "../../utils/util";
-import { Messages } from "../../utils/messages";
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import { Rating } from 'react-simple-star-rating';
+import { request } from '../../utils/request';
+import { API, ApiMethods } from '../../utils/util';
+import { Messages } from '../../utils/messages';
 
 export const RecipeDetails = () => {
   const [recipeDetails, setRecipeDetails] = useState([]);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState('');
   const location = useLocation();
 
   const fetchRecipeDetails = async () => {
@@ -41,23 +41,23 @@ export const RecipeDetails = () => {
   }, []);
   return (
     <>
-      <div style={{ marginTop: "60px" }}>
+      <div style={{ marginTop: '60px' }}>
         <ToastContainer />
-        <ul style={{ display: "flex", justifyContent: "center" }}>
+        <ul style={{ display: 'flex', justifyContent: 'center' }}>
           <li>
             <h1>{location?.state?.title}</h1>
 
-            <div style={{ margin: "20px", width: "70%" }}>
+            <div style={{ margin: '20px', width: '70%' }}>
               {recipeDetails?.steps?.match(/^\d+\./) ? (
                 <div>
-                  {recipeDetails.steps.split("\n").map((step, index) => (
+                  {recipeDetails.steps.split('\n').map((step, index) => (
                     <p key={index}>{step}</p>
                   ))}
                 </div>
               ) : (
                 <ol>
                   {recipeDetails?.steps
-                    ?.split("\n")
+                    ?.split('\n')
                     ?.map((step, index) => step && <li key={index}>{step}</li>)}
                 </ol>
               )}
@@ -66,8 +66,8 @@ export const RecipeDetails = () => {
               src={image}
               alt={recipeDetails.title}
               style={{
-                width: "80%",
-                height: "500px",
+                width: '80%',
+                height: '500px',
               }}
             />
             <h3>Ingredients:</h3>
@@ -89,7 +89,7 @@ export const RecipeDetails = () => {
                     <h4>{entry.userName}</h4>
                     <Rating initialValue={entry.rating} size="15" readonly />
                     <br />
-                    <p style={{ maxWidth: "80%" }}>{entry.comment}</p>
+                    <p style={{ maxWidth: '80%' }}>{entry.comment}</p>
                   </div>
                 ))}
               </div>

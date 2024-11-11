@@ -1,4 +1,4 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 export const DropDown = ({
   itemsList,
@@ -11,16 +11,16 @@ export const DropDown = ({
   return (
     <div
       style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "baseline",
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'baseline',
       }}
     >
       <label>{label}</label> &nbsp;&nbsp;
       <select
         name={name}
         id={id}
-        style={{ borderRadius: "5px", outline: "none", margin: "10px" }}
+        style={{ borderRadius: '5px', outline: 'none', margin: '10px' }}
         className={optionStyle}
         onChange={onChange}
       >
@@ -42,5 +42,5 @@ DropDown.propTypes = {
   label: PropTypes.string.isRequired,
   optionStyle: PropTypes.string.isRequired,
   onChange: PropTypes.func,
-  itemsList: PropTypes.arrayOf(PropTypes.number).isRequired, 
+  itemsList: PropTypes.arrayOf(PropTypes.number).isRequired,
 };

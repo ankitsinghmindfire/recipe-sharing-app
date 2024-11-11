@@ -1,14 +1,14 @@
-import axios from "axios";
+import axios from 'axios';
 
 const AxiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_BASE_URL}`,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 AxiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `${token}`;
     }

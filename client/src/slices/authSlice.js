@@ -1,13 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  token: localStorage.getItem("token") || null,
-  id: localStorage.getItem("userId") || null,
-  userName: localStorage.getItem("userName") || "",
+  token: localStorage.getItem('token') || null,
+  id: localStorage.getItem('userId') || null,
+  userName: localStorage.getItem('userName') || '',
 };
 
 const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
     loginSuccess(state, action) {
@@ -18,7 +18,7 @@ const authSlice = createSlice({
     logoutSuccess(state) {
       state.token = null;
       state.id = null;
-      state.userName = "";
+      state.userName = '';
     },
   },
 });

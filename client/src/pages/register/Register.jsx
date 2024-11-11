@@ -1,14 +1,14 @@
-import { ToastContainer, toast } from "react-toastify";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { request } from "../../utils/request";
-import Button from "../../components/button/Button";
-import InputField from "../../components/input/InputField";
-import { Messages } from "../../utils/messages";
-import { API, ApiMethods } from "../../utils/util";
-import { emailRegex, nameRegex, passwordRegex } from "../../utils/appConstants";
-import "react-toastify/dist/ReactToastify.css";
-import "../../App.css";
+import { ToastContainer, toast } from 'react-toastify';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { request } from '../../utils/request';
+import Button from '../../components/button/Button';
+import InputField from '../../components/input/InputField';
+import { Messages } from '../../utils/messages';
+import { API, ApiMethods } from '../../utils/util';
+import { emailRegex, nameRegex, passwordRegex } from '../../utils/appConstants';
+import 'react-toastify/dist/ReactToastify.css';
+import '../../App.css';
 
 export const Register = () => {
   const {
@@ -40,7 +40,7 @@ export const Register = () => {
         } else {
           toast.success(response.message);
           setTimeout(() => {
-            navigate("/login");
+            navigate('/login');
           }, 4000);
         }
       }
@@ -60,8 +60,8 @@ export const Register = () => {
               type="text"
               id="name"
               label="Full Name"
-              {...register("name", {
-                required: "Name is required",
+              {...register('name', {
+                required: 'Name is required',
                 pattern: {
                   value: nameRegex,
                   message: Messages.errors.INVALID_NAME,
@@ -75,8 +75,8 @@ export const Register = () => {
               type="text"
               id="username"
               label="Username"
-              {...register("username", {
-                required: "Username is required",
+              {...register('username', {
+                required: 'Username is required',
                 pattern: {
                   value: emailRegex,
                   message: Messages.errors.INVALId_USERNAME,
@@ -92,8 +92,8 @@ export const Register = () => {
               type="password"
               id="password"
               label="Password"
-              {...register("password", {
-                required: "Password is required",
+              {...register('password', {
+                required: 'Password is required',
                 pattern: {
                   value: passwordRegex,
                   message: Messages.errors.INVALID_PASSWORD,

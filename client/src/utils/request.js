@@ -1,14 +1,14 @@
-import AxiosInstance from "./AxiosInstance";
+import AxiosInstance from './AxiosInstance';
 
 export const request = async ({
   url,
-  method = "get",
+  method = 'get',
   body = {},
   params = null,
   headers = {},
-  responseType = "json",
+  responseType = 'json',
 }) => {
-  const queryString = params ? params : "";
+  const queryString = params ? params : '';
 
   try {
     const response = await AxiosInstance({

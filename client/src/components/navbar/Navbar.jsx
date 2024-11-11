@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch, useSelector } from "react-redux";
-import { logoutSuccess } from "../../slices/authSlice";
-import "./Navbar.css";
+import { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutSuccess } from '../../slices/authSlice';
+import './Navbar.css';
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +16,7 @@ export const Navbar = () => {
   const LogoutUser = () => {
     localStorage.clear();
     dispatch(logoutSuccess());
-    navigate("/login");
+    navigate('/login');
   };
 
   /**  Function to close the hamburger menu when a link is clicked */
@@ -36,25 +36,25 @@ export const Navbar = () => {
             icon={faBars}
             className="hamburger-icon"
             onClick={toggleMenu}
-            style={isOpen ? { transform: "rotate(90deg)" } : {}}
+            style={isOpen ? { transform: 'rotate(90deg)' } : {}}
           />
 
           <h2>Recipe Sharing App</h2>
         </div>
-        <div className={`nav-right ${isOpen ? "open" : ""}`}>
+        <div className={`nav-right ${isOpen ? 'open' : ''}`}>
           <ul>
             {token ? (
               <>
                 <li>
                   <NavLink to="/" onClick={handleToggleMenu}>
                     Recipes
-                  </NavLink>{" "}
+                  </NavLink>{' '}
                 </li>
 
                 <li>
                   <NavLink to="/addRecipe" onClick={handleToggleMenu}>
                     Add Recipe
-                  </NavLink>{" "}
+                  </NavLink>{' '}
                 </li>
                 <li>
                   <NavLink to="login" onClick={LogoutUser}>
@@ -65,7 +65,7 @@ export const Navbar = () => {
             ) : (
               <>
                 <li>
-                  <NavLink to="login">Login</NavLink>{" "}
+                  <NavLink to="login">Login</NavLink>{' '}
                 </li>
                 <li>
                   <NavLink to="signup">SignUp</NavLink>

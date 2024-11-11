@@ -20,13 +20,13 @@ export const AddRecipe = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm({
     defaultValues: {
       title: '',
       cookingTime: 0,
-      userOwner: id
-    }
+      userOwner: id,
+    },
   });
 
   const handleChange = (event) => {
@@ -42,17 +42,20 @@ export const AddRecipe = () => {
     }
   };
 
-  /** Handle ingredient change */ 
+  /** Handle ingredient change */
   const handleIngredientChange = (event, index) => {
     const { value } = event.target;
     const newIngredients = [...ingredients];
-    newIngredients[index] = value; /** Update the specific ingredient  */ 
-    setIngredients(newIngredients); /** Set updated ingredients array */ 
+    newIngredients[index] = value; /** Update the specific ingredient  */
+    setIngredients(newIngredients); /** Set updated ingredients array */
   };
 
   /** Handle adding a new ingredient input field */
   const handleAddIngredient = () => {
-    setIngredients([...ingredients, '']); /** Add an empty string to the ingredients array */ 
+    setIngredients([
+      ...ingredients,
+      '',
+    ]); /** Add an empty string to the ingredients array */
   };
 
   const onSubmit = async (data) => {
@@ -75,7 +78,7 @@ export const AddRecipe = () => {
         url: API.recipeAPI.recipe,
         method: ApiMethods.POST,
         body: formData,
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
       if (!response.error) {
         toast.success(Messages.success.RECIPE_CREATED);
@@ -102,7 +105,9 @@ export const AddRecipe = () => {
             label="Title"
             {...register('title', { required: 'Title is required' })}
           />
-          {errors.title && <span className="error">{errors.title.message}</span>}
+          {errors.title && (
+            <span className="error">{errors.title.message}</span>
+          )}
           {ingredients.map((ingredient, index) => (
             <div key={index}>
               <InputField
@@ -114,7 +119,11 @@ export const AddRecipe = () => {
               />
             </div>
           ))}
-          <Button type="button" onClick={handleAddIngredient} className={'btn-ingredents'}>
+          <Button
+            type="button"
+            onClick={handleAddIngredient}
+            className={'btn-ingredents'}
+          >
             Add Ingredient
           </Button>
           <TextareaField
@@ -140,11 +149,13 @@ export const AddRecipe = () => {
               required: 'Cooking Time is required',
               min: {
                 value: 1,
-                message: 'Cooking time must be at least 1 minute'
-              }
+                message: 'Cooking time must be at least 1 minute',
+              },
             })}
           />
-          {errors.cookingTime && <span className="error">{errors.cookingTime.message}</span>}
+          {errors.cookingTime && (
+            <span className="error">{errors.cookingTime.message}</span>
+          )}
           <Button type="submit" className={'btn-create-recipe'}>
             Create Recipe
           </Button>

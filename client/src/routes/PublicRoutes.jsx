@@ -1,7 +1,7 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import { Login } from "../pages/login/Login";
-import { Register } from "../pages/register/Register";
-import { useSelector } from "react-redux";
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { Login } from '../pages/login/Login';
+import { Register } from '../pages/register/Register';
+import { useSelector } from 'react-redux';
 
 export const PublicRoutes = () => {
   const { token } = useSelector((state) => state.auth);

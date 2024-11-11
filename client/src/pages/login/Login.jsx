@@ -1,16 +1,16 @@
-import { useDispatch } from "react-redux";
-import { useForm } from "react-hook-form";
-import { ToastContainer, toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { request } from "../../utils/request";
-import InputField from "../../components/input/InputField";
-import { loginSuccess } from "../../slices/authSlice";
-import Button from "../../components/button/Button";
-import { API, ApiMethods } from "../../utils/util";
-import { emailRegex, passwordRegex } from "../../utils/appConstants";
-import { Messages } from "../../utils/messages";
-import "react-toastify/dist/ReactToastify.css";
-import "../../App.css";
+import { useDispatch } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { request } from '../../utils/request';
+import InputField from '../../components/input/InputField';
+import { loginSuccess } from '../../slices/authSlice';
+import Button from '../../components/button/Button';
+import { API, ApiMethods } from '../../utils/util';
+import { emailRegex, passwordRegex } from '../../utils/appConstants';
+import { Messages } from '../../utils/messages';
+import 'react-toastify/dist/ReactToastify.css';
+import '../../App.css';
 
 /** handle login function */
 export const Login = () => {
@@ -44,11 +44,11 @@ export const Login = () => {
               userName: response.userName,
             })
           );
-          localStorage.setItem("token", response.token);
-          localStorage.setItem("userId", response.userId);
-          localStorage.setItem("userName", response.userName);
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('userId', response.userId);
+          localStorage.setItem('userName', response.userName);
 
-          navigate("/");
+          navigate('/');
         } else {
           toast.error(response.error);
         }
@@ -65,15 +65,12 @@ export const Login = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <h2>Login</h2>
           <div className="form-group">
-
-
-            
             <InputField
               type="text"
               id="username"
               label="Username"
-              {...register("username", {
-                required: "Username is required",
+              {...register('username', {
+                required: 'Username is required',
                 pattern: {
                   value: emailRegex,
                   message: Messages.errors.INVALId_USERNAME,
@@ -89,8 +86,8 @@ export const Login = () => {
               type="password"
               id="password"
               label="Password"
-              {...register("password", {
-                required: "Password is required",
+              {...register('password', {
+                required: 'Password is required',
                 pattern: {
                   value: passwordRegex,
                   message: Messages.errors.INVALID_PASSWORD,

@@ -5,38 +5,38 @@ export const nameRegex = /^[A-Z][a-zA-Z0-9-' ]{1,}$/;
 
 export const ratingData = [
   {
-    key: "★",
+    key: '★',
     value: 1,
   },
   {
-    key: "★★",
+    key: '★★',
     value: 2,
   },
   {
-    key: "★★★",
+    key: '★★★',
     value: 3,
   },
   {
-    key: "★★★★",
+    key: '★★★★',
     value: 4,
   },
   {
-    key: "★★★★★",
+    key: '★★★★★',
     value: 5,
   },
 ];
 
 export const cookingTimeData = [
   {
-    key: "<= 30 min",
+    key: '<= 30 min',
     value: 30,
   },
   {
-    key: "<= 60 min",
+    key: '<= 60 min',
     value: 60,
   },
   {
-    key: "More than 60 min",
+    key: 'More than 60 min',
     value: 61,
   },
 ];

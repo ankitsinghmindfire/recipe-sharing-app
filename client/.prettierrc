@@ -4,5 +4,5 @@
   "printWidth": 80,
   "singleQuote": true,
   "trailingComma": "es5",
-  "userTabs": false
+  "useTabs": false
 }
