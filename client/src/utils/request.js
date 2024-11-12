@@ -22,7 +22,6 @@ export const request = async ({
     const res = response?.data;
     return res;
   } catch (error) {
-    console.log(error);
     return error?.response?.data;
   }
 };

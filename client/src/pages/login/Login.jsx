@@ -1,3 +1,4 @@
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { ToastContainer, toast } from 'react-toastify';
@@ -98,7 +99,7 @@ export const Login = () => {
               <span className="error">{errors.password.message}</span>
             )}
           </div>
-          <Button type="submit" className="btn-login">
+          <Button type="submit" className="btn-login" role="button">
             Login
           </Button>
         </form>
