@@ -64,7 +64,6 @@ describe('Navbar Component', () => {
     const store = mockStore(initialState);
 
     // Mock functions for navigation and local storage
-    const mockNavigate = jest.fn();
     const mockClear = jest.spyOn(Storage.prototype, 'clear');
     store.dispatch = jest.fn();
 

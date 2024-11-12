@@ -1,4 +1,4 @@
-import React ,{ useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import InputField from '../../components/input/InputField';
 import Button from '../../components/button/Button';
@@ -89,7 +89,7 @@ export const AddRecipe = () => {
         toast.error(response.error);
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 
@@ -113,7 +113,7 @@ export const AddRecipe = () => {
               <InputField
                 type="text"
                 key={index}
-                id={index+""}
+                id={index + ''}
                 label={'Ingredients'}
                 value={ingredient}
                 onChange={(event) => handleIngredientChange(event, index)}
@@ -158,7 +158,7 @@ export const AddRecipe = () => {
           {errors.cookingTime && (
             <span className="error">{errors.cookingTime.message}</span>
           )}
-          <Button type="submit" className={'btn-create-recipe'}>
+          <Button type="submit" className={'btn-create-recipe'} role="button">
             Create Recipe
           </Button>
         </form>
