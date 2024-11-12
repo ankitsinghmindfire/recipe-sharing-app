@@ -20,7 +20,7 @@ InputField.displayName = 'InputField';
 // Prop validation with PropTypes
 InputField.propTypes = {
   isBr: PropTypes.bool,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   id: PropTypes.string.isRequired,
   error: PropTypes.string,
   type: PropTypes.string.isRequired,

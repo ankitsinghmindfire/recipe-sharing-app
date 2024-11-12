@@ -42,7 +42,7 @@ export const DropDown = ({
 
 DropDown.propTypes = {
   id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   label: PropTypes.string.isRequired,
   optionStyle: PropTypes.string.isRequired,
   onChange: PropTypes.func,

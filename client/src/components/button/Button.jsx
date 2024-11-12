@@ -1,7 +1,12 @@
 import React from 'react';
-const Button = ({ type = 'button', onClick, className, children }) => {
+const Button = ({ type = 'button', onClick, className, children, id }) => {
   return (
-    <button type={type} onClick={onClick} className={className}>
+    <button
+      type={type}
+      onClick={onClick}
+      className={className}
+      data-testid={id}
+    >
       {children}
     </button>
   );

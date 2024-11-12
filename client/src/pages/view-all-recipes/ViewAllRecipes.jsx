@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Rating } from 'react-simple-star-rating';
 import { request } from '../../utils/request';
 import { useNavigate } from 'react-router-dom';
@@ -43,6 +43,7 @@ export const ViewAllRecipes = () => {
 
           return window.URL.createObjectURL(blob);
         });
+        console.log('response', response);
 
         setRecipes(response);
         setImages(recipeImages);
@@ -156,6 +157,7 @@ export const ViewAllRecipes = () => {
       <div className="filters">
         <div className="rating-filter">
           <DropDown
+            id="ratings"
             itemsList={ratingData} // Dropdown for rating filter
             label="Ratings  "
             optionStyle={'stars'}
@@ -167,6 +169,7 @@ export const ViewAllRecipes = () => {
         </div>
         <div className="time-filter">
           <DropDown
+            id="cookingTime"
             itemsList={cookingTimeData} // Dropdown for cooking time filter
             label="CookingTime  "
             onChange={handleCookingTimeFilter}
@@ -183,6 +186,7 @@ export const ViewAllRecipes = () => {
             placeholder="Search recipes"
             onChange={(e) => SearchRecipes(e)}
             isBr={true}
+            id="search"
           />
         </div>
       </div>
@@ -257,9 +261,11 @@ export const ViewAllRecipes = () => {
               />
               <br />
               <Button
+                data-testid="addComment"
                 className={'btn-add-comment'}
                 type="button"
                 onClick={() => handleAddComment(recipe._id)} // Handle comment submission
+                role="button"
               >
                 Add comment
               </Button>
