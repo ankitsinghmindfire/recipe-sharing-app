@@ -11,5 +11,5 @@ module.exports = {
     ],
     '@babel/preset-react', // Adds support for JSX
   ],
-  plugins: [],
+  plugins: ['babel-plugin-transform-vite-meta-env'],
 };

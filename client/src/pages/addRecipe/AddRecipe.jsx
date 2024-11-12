@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React ,{ useState } from 'react';
 import { useForm } from 'react-hook-form';
 import InputField from '../../components/input/InputField';
 import Button from '../../components/button/Button';
@@ -113,6 +113,7 @@ export const AddRecipe = () => {
               <InputField
                 type="text"
                 key={index}
+                id={index+""}
                 label={'Ingredients'}
                 value={ingredient}
                 onChange={(event) => handleIngredientChange(event, index)}
@@ -123,6 +124,7 @@ export const AddRecipe = () => {
             type="button"
             onClick={handleAddIngredient}
             className={'btn-ingredents'}
+            role="button"
           >
             Add Ingredient
           </Button>

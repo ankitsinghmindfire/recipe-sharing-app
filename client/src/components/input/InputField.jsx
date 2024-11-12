@@ -22,7 +22,7 @@ InputField.propTypes = {
   isBr: PropTypes.bool,
   label: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
-  error: PropTypes.string.isRequired,
+  error: PropTypes.string,
   type: PropTypes.string.isRequired,
   value: PropTypes.string,
   onChange: PropTypes.func,
