@@ -16,9 +16,11 @@
 
 ### Create a .env file in the project root and configure your environment variables:
 
-**PORT=8626<br/>
-URI=mongodb+srv://singhankitmindfire:Ankitsingh1234@recipes.5vcfr.mongodb.net/recipes?retryWrites=true&w=majority&appName=recipes<br/>
-SECRET=your-secret-key**
+**PORT=8626**<br/>
+
+**URI=mongodb+srv://singhankitmindfire:Ankitsingh1234@recipes.5vcfr.mongodb.net/recipes?retryWrites=true&w=majority&appName=recipes**<br/>
+
+**SECRET=your-secret-key**
 
 Replace your-secret-key with a secure secret for JWT token generation.
 ### Start the development server : **npm start**
