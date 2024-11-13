@@ -1,16 +1,13 @@
-import React, { act } from 'react';
-import { configureStore } from '@reduxjs/toolkit';
+import React from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { loginSuccess } from '../../slices/authSlice';
-import { ToastContainer } from 'react-toastify';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { Login } from './Login';
+import store from '../../app/store';
 import { request } from '../../utils/request';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 
-// jest.mock('../../utils/request');
 jest.mock('../../utils/request', () => ({
   request: jest.fn().mockResolvedValue({
     error: false,
@@ -25,145 +22,119 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
-jest.mock('../../slices/authSlice', () => ({
-  ...jest.requireActual('../../slices/authSlice'),
-  loginSuccess: jest.fn(),
-}));
-
-// Mock useNavigate
-const mockNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
-}));
-
-// Mock Redux store with initial state
-const mockStore = (initialState) => {
-  return configureStore({
-    reducer: {
-      auth: (state = initialState.auth, action) => {
-        if (action.type === loginSuccess.type) {
-          return {
-            ...state,
-            token: action.payload.token,
-            userId: action.payload.userId,
-            userName: action.payload.userName,
-          };
-        }
-        return state;
-      },
-    },
-    preloadedState: initialState,
-  });
-};
-
-const renderWithProviders = (ui, { initialState }) => {
-  const store = mockStore(initialState);
-  return render(
-    <Provider store={store}>
-      <Router>{ui}</Router>
-    </Provider>
-  );
-};
-
 describe('Login Component', () => {
-  const initialState = { auth: { token: null, userId: null, userName: null } };
-  const mockNavigate = useNavigate();
-
-  beforeEach(() => {
-    localStorage.clear();
-    jest.clearAllMocks();
-
-    // Mock setItem method on localStorage
-    Object.defineProperty(window, 'localStorage', {
-      value: {
-        setItem: jest.fn(),
-        getItem: jest.fn(),
-        clear: jest.fn(),
-      },
-      writable: true,
-    });
-
-    renderWithProviders(
-      <>
-        <ToastContainer />
-        <Login />
-      </>,
-      {
-        initialState,
-      }
-    );
+  beforeAll(() => {
+    console.error = jest.fn();
   });
+  const mockDispatch = jest.spyOn(store, 'dispatch');
 
-  // it('should render form fields correctly', () => {
-  //   expect(screen.getByLabelText(/Username/i)).toBeInTheDocument();
-  //   expect(screen.getByLabelText(/Password/i)).toBeInTheDocument();
-  //   expect(screen.getByRole('button', { name: /Login/i })).toBeInTheDocument();
-  // });
-
-  // it('displays validation error if fields are empty', async () => {
-  //   await act(async () => {
-  //     fireEvent.change(screen.getByLabelText(/Username/i), {
-  //       target: { value: '' },
-  //     });
-  //     fireEvent.change(screen.getByLabelText(/Password/i), {
-  //       target: { value: '' },
-  //     });
-  //     fireEvent.click(screen.getByRole('button', { name: /Login/i }));
-  //   });
-
-  //   await waitFor(() => {
-  //     expect(screen.getByText(/Username is required/i)).toBeInTheDocument();
-  //     expect(screen.getByText(/Password is required/i)).toBeInTheDocument();
-  //   });
-  // });
-
-  it('handles successful login', async () => {
+  it('renders Login form with username and password fields', () => {
+    render(
+      <Provider store={store}>
+        <Router>
+          <Login />
+        </Router>
+      </Provider>
+    );
+    expect(screen.getByLabelText(/Username/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Password/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
+  });
+  it('displays error when username or password is not provided', async () => {
+    render(
+      <Provider store={store}>
+        <Router>
+          <Login />
+        </Router>
+      </Provider>
+    );
+    fireEvent.click(screen.getByRole('button', { name: /login/i }));
+    expect(
+      await screen.findByText(/Username is required/i)
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByText(/Password is required/i)
+    ).toBeInTheDocument();
+  });
+  it('dispatches loginSuccess and navigates on successful login', async () => {
     const mockResponse = {
-      token: 'fake-token',
-      userId: '123',
-      userName: 'testuser',
+      token: 'mock-token',
+      userId: 'mock-user-id',
+      userName: 'mock-username',
     };
 
     request.mockResolvedValue(mockResponse);
 
-    // fireEvent.change(screen.getByLabelText(/Username/i), {
-    //   target: { value: 'test@example.com' },
-    // });
-    // fireEvent.change(screen.getByLabelText(/Password/i), {
-    //   target: { value: 'Password123' },
-    // });
-    // await act(async () => {
-    //   fireEvent.click(screen.getByRole('button', { name: /Login/i }));
-    // });
-
-    // await waitFor(() => {
-      // Expect localStorage to have the correct values
-      // expect(localStorage.setItem).toHaveBeenCalledWith(
-      //   'token',
-      //   mockResponse.token
-      // );
-      // expect(localStorage.setItem).toHaveBeenCalledWith(
-      //   'userId',
-      //   mockResponse.userId
-      // );
-      // expect(localStorage.setItem).toHaveBeenCalledWith(
-      //   'userName',
-      //   mockResponse.userName
-      // );
-
-      // expect(mockNavigate).toHaveBeenCalledWith('/');
-      // expect(toast.error).not.toHaveBeenCalled();
-    // });
-
-    renderWithProviders(
-      <>
-        <ToastContainer />
-        <Login />
-      </>,
-      {
-        initialState,
-      }
+    render(
+      <Provider store={store}>
+        <Router>
+          <Login />
+        </Router>
+      </Provider>
     );
+
+    fireEvent.input(screen.getByLabelText(/Username/i), {
+      target: { value: 'test@example.com' },
+    });
+    fireEvent.input(screen.getByLabelText(/Password/i), {
+      target: { value: 'Password123!' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /login/i }));
+
+    await waitFor(() => {
+      expect(mockDispatch).toHaveBeenCalledWith(
+        loginSuccess({
+          token: mockResponse.token,
+          id: mockResponse.userId,
+          userName: mockResponse.userName,
+        })
+      );
+      expect(localStorage.getItem('token')).toBe(mockResponse.token);
+      expect(localStorage.getItem('userId')).toBe(mockResponse.userId);
+      expect(localStorage.getItem('userName')).toBe(mockResponse.userName);
+    });
+  });
+  test('displays error if username is invalid', async () => {
+    render(
+      <Provider store={store}>
+        <Router>
+          <Login />
+        </Router>
+      </Provider>
+    );
+    fireEvent.input(screen.getByLabelText(/Username/i), {
+      target: { value: 'invalidemail' },
+    });
+    fireEvent.input(screen.getByLabelText(/Password/i), {
+      target: { value: 'Password123!' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /login/i }));
+    expect(
+      await screen.findByText(/Please enter a valid email/i)
+    ).toBeInTheDocument();
+  });
+  it('should show an error toast if login fails', async () => {
+    request.mockRejectedValue(new Error('Failed to login user'));
+
+    render(
+      <Provider store={store}>
+        <Router>
+          <Login />
+        </Router>
+      </Provider>
+    );
+
+    fireEvent.input(screen.getByLabelText(/username/i), {
+      target: { value: 'test@example.com' },
+    });
+    fireEvent.input(screen.getByLabelText(/password/i), {
+      target: { value: 'Password123!' },
+    });
+
+    fireEvent.submit(screen.getByRole('button', { name: /login/i }));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Failed to login user');
+    });
   });
 });

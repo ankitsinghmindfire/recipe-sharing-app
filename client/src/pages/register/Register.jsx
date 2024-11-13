@@ -1,3 +1,4 @@
+import React from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -106,7 +107,7 @@ export const Register = () => {
               <span className="error">{errors.password.message}</span>
             )}
           </div>
-          <Button type="submit" className="btn-register">
+          <Button type="submit" className="btn-register" id={'register'}>
             Register
           </Button>
         </form>
