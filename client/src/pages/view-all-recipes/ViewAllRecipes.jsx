@@ -43,8 +43,6 @@ export const ViewAllRecipes = () => {
 
           return window.URL.createObjectURL(blob);
         });
-        console.log('response', response);
-
         setRecipes(response);
         setImages(recipeImages);
       } else {
@@ -163,19 +161,28 @@ export const ViewAllRecipes = () => {
             optionStyle={'stars'}
             onChange={handleRatingsFilter}
           />
-          <Button className={'clear'} onClick={handleResetFilters}>
+          <Button
+            className={'clear clear-rating'}
+            onClick={handleResetFilters}
+            id="clear-rating-button"
+            aria-label="Clear Rating Filter"
+          >
             Clear Filter
           </Button>
         </div>
         <div className="time-filter">
           <DropDown
             id="cookingTime"
-            itemsList={cookingTimeData} // Dropdown for cooking time filter
+            itemsList={cookingTimeData}
             label="CookingTime  "
             onChange={handleCookingTimeFilter}
             optionStyle={'time'}
           />
-          <Button className={'clear'} onClick={handleResetFilters}>
+          <Button
+            className={'clear clear-time'}
+            onClick={handleResetFilters}
+            id="clear-time-button"
+          >
             Clear Filter
           </Button>
         </div>
@@ -275,6 +282,7 @@ export const ViewAllRecipes = () => {
                 emptyColor="gray"
                 initialValue={rating}
                 value={rating}
+                className={`${index}`}
               />
               <p>Cooking Time: {recipe.cookingTime} minutes</p>
 
